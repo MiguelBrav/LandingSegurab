@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Segurab | Soluciones Digitales Empresariales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body class="bg-gray-950 text-gray-100 font-sans selection:bg-blue-500 selection:text-white">
+
+  <!-- FLOATING AI BUTTON -->
+  <button id="aiButton"
+    class="fixed right-6 bottom-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-6 py-3 rounded-full shadow-lg shadow-blue-500/30 z-50 flex items-center gap-2 transition-all hover:scale-105 group backdrop-blur-md">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-pulse">
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <line x1="12" x2="12" y1="19" y2="22" />
+    </svg>
+    <span class="font-semibold">Segurab AI</span>
+  </button>
+
+  <!-- AI MODAL -->
+  <div id="aiModal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title"
+    class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center z-50 transition-opacity duration-300 opacity-0">
+    <div id="modalContent"
+      class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col"
+      style="max-height: 90vh;">
+
+      <!-- Header -->
+      <div class="flex justify-between items-center p-6 pb-4 border-b border-gray-800 shrink-0">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" x2="12" y1="19" y2="22" />
+            </svg>
+          </div>
+          <div>
+            <h3 id="ai-modal-title" class="text-lg font-bold text-white">Segurab AI</h3>
+            <p class="text-xs text-green-400">● En línea</p>
+          </div>
+        </div>
+        <button id="closeModal" aria-label="Cerrar chat"
+          class="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-800">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Messages -->
+      <div id="chatMessages" class="chat-messages p-4 grow" role="log" aria-live="polite"
+        aria-label="Conversación con asistente">
+        <!-- Mensaje de bienvenida -->
+        <div class="chat-bubble-wrapper chat-bubble-wrapper--agent">
+          <div class="chat-bubble chat-bubble--agent">
+            👋 Hola, soy el asistente virtual de Segurab. ¿En qué te puedo ayudar?
+          </div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="p-4 pt-3 border-t border-gray-800 shrink-0">
+        <div class="flex gap-2 items-end bg-gray-800 rounded-xl p-1.5">
+          <textarea id="chatInput" rows="1" placeholder="Escribe tu pregunta..." aria-label="Mensaje al asistente"
+            class="flex-1 bg-transparent text-gray-100 placeholder-gray-500 text-sm resize-none outline-none px-2 py-1.5 max-h-32"></textarea>
+          <button id="chatSendBtn" aria-label="Enviar mensaje"
+            class="shrink-0 bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-lg transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+        <p class="text-xs text-gray-600 mt-2 text-center">Presiona Enter para enviar · Shift+Enter para nueva línea</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 w-full bg-gray-950/80 backdrop-blur-md z-40 border-b border-gray-800">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
+      <div class="flex items-center gap-3">
+        <img src="/logo.png" alt="Segurab Logo" class="h-10 w-auto" />
+      </div>
+      <nav class="space-x-8 hidden md:block">
+        <a href="#services" class="nav-link">Servicios</a>
+        <a href="#process" class="nav-link">Procesos</a>
+        <a href="#team" class="nav-link">Equipo</a>
+        <a href="#tech" class="nav-link">Tecnologías</a>
+        <a href="#contact"
+          class="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition text-sm font-semibold">Contacto</a>
+      </nav>
+      <button class="md:hidden text-gray-300" id="mobileMenuBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="min-h-screen pt-20 flex items-center justify-center text-center px-6 relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+      <div
+        class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl animate-pulse delay-1000">
+      </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto relative z-10">
+      <div
+        class="inline-block mb-4 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium animate-float">
+        🚀 Construyendo el futuro digital desde 2025
+      </div>
+      <h2 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+        Creamos Software Que <br />
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Impulsa
+          Negocios</span>
+      </h2>
+      <p class="text-gray-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+        Especialistas en desarrollo web a medida, backend empresarial y soluciones de IA.
+        Transformamos ideas complejas en productos digitales escalables y seguros.
+      </p>
+      <div class="flex flex-col md:flex-row gap-4 justify-center">
+        <a href="#services" class="btn-primary">Explorar Servicios</a>
+        <button id="openAiFromHero"
+          class="px-8 py-4 rounded-full border border-gray-700 hover:bg-gray-800 transition font-semibold text-gray-300">
+          Consultar a la IA
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="py-24 bg-gray-900/30">
+    <div class="max-w-7xl mx-auto px-6">
+      <h3 class="section-title">Nuestros Servicios</h3>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div class="card group">
+          <div
+            class="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+            <svg class="text-blue-500 w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Desarrollo Web a Medida</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Aplicaciones robustas y escalables adaptadas a tus
+            necesidades específicas.</p>
+        </div>
+
+        <div class="card group">
+          <div
+            class="w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition-colors">
+            <svg class="text-purple-500 w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Landing Pages Corporativas</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Diseños de alto impacto orientados a la conversión y
+            posicionamiento de marca.</p>
+        </div>
+
+        <div class="card group">
+          <div
+            class="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-indigo-500/20 transition-colors">
+            <svg class="text-indigo-500 w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+            </svg>
+          </div>
+          <h4 class="text-xl font-bold mb-3">APIs y Backends</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Arquitecturas sólidas para soportar tu operación digital.</p>
+        </div>
+
+        <div class="card group">
+          <div
+            class="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
+            <svg class="text-green-500 w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Automatización de Procesos</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Optimizamos flujos de trabajo repetitivos para ahorrar tiempo
+            y costos.</p>
+        </div>
+
+        <div class="card group">
+          <div
+            class="w-14 h-14 bg-orange-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-orange-500/20 transition-colors">
+            <svg class="text-orange-500 w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+            </svg>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Despliegues en la Nube</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Gestión de infraestructura moderna.</p>
+        </div>
+
+        <div class="card group">
+          <div
+            class="w-14 h-14 bg-pink-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-pink-500/20 transition-colors">
+            <svg class="text-pink-500 w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Integración de IA</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Chatbots, RAG y soluciones inteligentes para tu negocio.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="py-24 relative">
+    <div class="absolute inset-0 bg-blue-900/5 -z-10"></div>
+    <div class="max-w-7xl mx-auto px-6">
+      <h3 class="section-title">Cómo Trabajamos</h3>
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-center hover:border-blue-500/30 transition">
+          <div class="text-4xl font-black text-gray-800 mb-4 select-none">01</div>
+          <h4 class="text-lg font-bold text-white mb-2">Scrum</h4>
+          <p class="text-sm text-gray-400">Iteraciones ágiles y entregas constantes de valor.</p>
+        </div>
+        <div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-center hover:border-blue-500/30 transition">
+          <div class="text-4xl font-black text-gray-800 mb-4 select-none">02</div>
+          <h4 class="text-lg font-bold text-white mb-2">GitFlow</h4>
+          <p class="text-sm text-gray-400">Control de versiones ordenado y colaborativo.</p>
+        </div>
+        <div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-center hover:border-blue-500/30 transition">
+          <div class="text-4xl font-black text-gray-800 mb-4 select-none">03</div>
+          <h4 class="text-lg font-bold text-white mb-2">Despliegue a Entornos</h4>
+          <p class="text-sm text-gray-400">Implementación segura en ambientes de prueba y producción.</p>
+        </div>
+        <div class="p-6 bg-gray-900 border border-gray-800 rounded-xl text-center hover:border-blue-500/30 transition">
+          <div class="text-4xl font-black text-gray-800 mb-4 select-none">04</div>
+          <h4 class="text-lg font-bold text-white mb-2">QA Integrado</h4>
+          <p class="text-sm text-gray-400">Calidad asegurada desde el primer día.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MECHANICS / TECHNOLOGIES -->
+  <section id="tech" class="py-24 bg-gray-900/30">
+    <div class="max-w-7xl mx-auto px-6">
+      <h3 class="section-title">Nuestras Tecnologías</h3>
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+
+        <div class="bg-gray-800/40 p-8 rounded-2xl border border-gray-700/50 hover:bg-gray-800/60 transition">
+          <h4 class="text-2xl font-bold text-white mb-4">Ecosistema .NET</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li>.NET 8 / .NET 10 (Moderno)</li>
+            <li>.NET 6 (Migraciones)</li>
+            <li>ASP.NET Core / Blazor</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-800/40 p-8 rounded-2xl border border-gray-700/50 hover:bg-gray-800/60 transition">
+          <h4 class="text-2xl font-bold text-white mb-4">Multiplataforma</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li>Soporte Java y PHP</li>
+            <li>Vanilla JS y Frontend Moderno</li>
+            <li>Contenedores Docker</li>
+          </ul>
+        </div>
+
+        <div class="bg-gray-800/40 p-8 rounded-2xl border border-gray-700/50 hover:bg-gray-800/60 transition">
+          <h4 class="text-2xl font-bold text-white mb-4">Persistencia de Datos</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li>SQL Server / PostgreSQL</li>
+            <li>MySQL / MariaDB</li>
+            <li>MongoDB (NoSQL)</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team" class="py-24">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h3 class="section-title">Líderes de Segurab</h3>
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <div class="team-card group">
+          <div class="relative inline-block mx-auto mb-6">
+            <div
+              class="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden border-4 border-gray-800 group-hover:border-blue-500 transition-colors">
+              <span class="text-3xl font-bold text-gray-500">MS</span>
+            </div>
+            <div
+              class="absolute bottom-0 right-0 bg-blue-600 w-8 h-8 rounded-full flex items-center justify-center border-2 border-gray-900">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          <h4>Miguel Segura</h4>
+          <p>Fundador</p>
+          <div class="mt-4 text-xs text-gray-500">
+            "Software limpio, mantenible y eficiente."
+          </div>
+        </div>
+
+        <div class="team-card group">
+          <div class="relative inline-block mx-auto mb-6">
+            <div
+              class="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden border-4 border-gray-800 group-hover:border-blue-500 transition-colors">
+              <span class="text-3xl font-bold text-gray-500">JC</span>
+            </div>
+            <div
+              class="absolute bottom-0 right-0 bg-purple-600 w-8 h-8 rounded-full flex items-center justify-center border-2 border-gray-900">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M2 5a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm14 1a1 1 0 11-2 0 1 1 0 012 0zM2 13a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H4a2 2 0 01-2-2v-2zm14 1a1 1 0 11-2 0 1 1 0 012 0z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+          </div>
+          <h4>Jonathan Cruz</h4>
+          <p>CTO</p>
+          <div class="mt-4 text-xs text-gray-500">
+            "Procesos sólidos para sistemas escalables."
+          </div>
+        </div>
+
+        <div class="team-card group">
+          <div class="relative inline-block mx-auto mb-6">
+            <div
+              class="w-32 h-32 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden border-4 border-gray-800 group-hover:border-blue-500 transition-colors">
+              <span class="text-3xl font-bold text-gray-500">JP</span>
+            </div>
+            <div
+              class="absolute bottom-0 right-0 bg-green-600 w-8 h-8 rounded-full flex items-center justify-center border-2 border-gray-900">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 20 20"
+                fill="currentColor">
+                <path
+                  d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+              </svg>
+            </div>
+          </div>
+          <h4>Jazid Pérez</h4>
+          <p>Líder de Marketing</p>
+          <div class="mt-4 text-xs text-gray-500">
+            "Crecimiento estratégico y posicionamiento."
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="py-24 bg-gradient-to-b from-gray-900 to-black">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h3 class="section-title">Empieza tu proyecto hoy</h3>
+      <p class="text-gray-400 mb-8 max-w-lg mx-auto">
+        ¿Tienes una idea en mente? En Segurab convertimos tus requerimientos en software funcional y de alto
+        rendimiento.
+      </p>
+      <a href="mailto:contacto@Segurab.com"
+        class="inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-gray-200 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+        contacto@Segurab.com
+      </a>
+    </div>
+  </section>
+
+  <footer class="py-8 text-center text-gray-600 border-t border-gray-900 bg-gray-950">
+    <p>© <span id="current-year"></span> Segurab. Todos los derechos reservados.</p>
+    <div class="mt-2 flex justify-center gap-4 text-sm">
+      <!-- TODO: Add links -->
+      <!-- <a href="#" class="hover:text-gray-400">Privacidad</a>
+      <a href="#" class="hover:text-gray-400">Términos</a> -->
+    </div>
+  </footer>
+
+  <script type="module" src="/main.js"></script>
+
+</body>
+
+</html>
