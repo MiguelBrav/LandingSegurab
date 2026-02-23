@@ -48,3 +48,6 @@ El sistema está diseñado para integrarse con un agente vía API en pocos segun
 - **Tailwind CSS v4**: Estilizado moderno y eficiente.
 - **Vanilla JS (ES6+)**: Lógica limpia y modular sin dependencias pesadas.
 - **HTML5/ARIA**: Accesibilidad y SEO optimizado.
+
+## 📄 Licencia
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
