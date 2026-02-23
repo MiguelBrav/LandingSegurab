@@ -2,7 +2,7 @@
 
 Landing page moderna y escalable, construida para **SeguraB** utilizando tecnologías de alto rendimiento y una arquitectura modular.
 
-## 🚀 Cómo ejecutar el proyecto
+## Cómo ejecutar el proyecto
 
 1. **Instalar dependencias**:
    ```bash
@@ -21,7 +21,7 @@ Landing page moderna y escalable, construida para **SeguraB** utilizando tecnolo
    ```
    Los archivos optimizados se generan en `dist/`.
 
-## 🛠️ Arquitectura y Estructura
+## Arquitectura y Estructura
 
 El proyecto ha sido refactorizado para ser **escalable** y permitir la integración sencilla de servicios externos (específicamente un Agente de IA).
 
@@ -34,7 +34,7 @@ El proyecto ha sido refactorizado para ser **escalable** y permitir la integraci
   - `modal.js`: Gestiona la interfaz del chat, transiciones y renderizado de mensajes.
   - `nav.js`: Controla la navegación, scroll suave y el menú móvil optimizado.
 
-## 🤖 Integración del Agente de IA
+## Integración del Agente de IA
 
 El sistema está diseñado para integrarse con un agente vía API en pocos segundos.
 
@@ -43,11 +43,11 @@ El sistema está diseñado para integrarse con un agente vía API en pocos segun
 2. Cambia `AI_MODE = 'mock'` por `AI_MODE = 'api'`.
 3. Define tu endpoint en `AI_API_URL`.
 
-## ✨ Tecnologías
+## Tecnologías
 - **Vite**: Bundler ultra-rápido.
 - **Tailwind CSS v4**: Estilizado moderno y eficiente.
 - **Vanilla JS (ES6+)**: Lógica limpia y modular sin dependencias pesadas.
 - **HTML5/ARIA**: Accesibilidad y SEO optimizado.
 
-## 📄 Licencia
+## Licencia
 Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
