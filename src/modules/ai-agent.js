@@ -10,10 +10,13 @@
  */
 
 // ─── Configuración ───────────────────────────────────────────────────────────
-const AI_MODE = 'mock'; // Cambiar a 'api' cuando el agente esté listo
-const AI_API_URL = '/api/agent/chat'; // Endpoint del agente real
+const AI_MODE = 'api';
+const AI_API_URL = 'https://ragcc.segurab.com/api/chat/segurab';
 
-// ─── Respuestas mock ──────────────────────────────────────────────────────────
+// ─── Estado del Agente ────────────────────────────────────────────────────────
+let chatHistory = []; // Almacena los últimos msgs para contexto
+
+// ─── Respuestas mock (Backup) ─────────────────────────────────────────────────
 const MOCK_RESPONSES = [
     'Hola 👋 Soy el asistente de Segurab. Estoy en fase de entrenamiento con nuestra documentación corporativa.',
     'Pronto podré responder sobre nuestros servicios, tecnologías y procesos internos.',
@@ -49,10 +52,16 @@ async function _mockResponse(_userMessage) {
 
 async function _apiResponse(userMessage) {
     try {
+        // Obtenemos los últimos 4 mensajes del historial ANTES de este envío
+        const historyToSend = chatHistory.slice(-4);
+
         const response = await fetch(AI_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: userMessage }),
+            body: JSON.stringify({
+                message: userMessage,
+                history: historyToSend
+            }),
         });
 
         if (!response.ok) {
@@ -60,8 +69,16 @@ async function _apiResponse(userMessage) {
         }
 
         const data = await response.json();
-        // Adaptar al campo que retorne el agente (text, reply, message, etc.)
-        return { text: data.text ?? data.reply ?? data.message ?? 'Sin respuesta.' };
+        const assistantText = data.answer || data.text || data.reply || data.message || 'Sin respuesta.';
+
+        // Actualizamos el historial local con la interacción actual
+        chatHistory.push({ role: 'user', content: userMessage });
+        chatHistory.push({ role: 'assistant', content: assistantText });
+
+        // Mantenemos el historial local manejable (ej. últimos 10 para rotar)
+        if (chatHistory.length > 10) chatHistory = chatHistory.slice(-10);
+
+        return { text: assistantText };
     } catch (err) {
         console.error('[ai-agent] Error al contactar el agente:', err);
         return {

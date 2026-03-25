@@ -146,12 +146,37 @@ function _appendBubble(text, type) {
 
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble chat-bubble--${type}`;
-    bubble.textContent = text;
+
+    // Renderizado simple de Markdown (negritas y saltos de línea)
+    bubble.innerHTML = _formatMarkdown(text);
 
     wrapper.appendChild(bubble);
     _chatMessages.appendChild(wrapper);
     _chatMessages.scrollTop = _chatMessages.scrollHeight;
     return wrapper;
+}
+
+/**
+ * Convierte un subconjunto de Markdown para la UI del chat:
+ *  - **negrita** -> <strong>negrita</strong>
+ *  - \n -> <br>
+ *  - Escape de HTML para seguridad activa
+ */
+function _formatMarkdown(text) {
+    if (!text) return '';
+
+    // 1. Escapar HTML para prevenir XSS
+    const div = document.createElement('div');
+    div.textContent = text;
+    let html = div.innerHTML;
+
+    // 2. Procesar **negrita**
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // 3. Procesar saltos de línea
+    html = html.replace(/\n/g, '<br>');
+
+    return html;
 }
 
 function _appendTypingIndicator() {
