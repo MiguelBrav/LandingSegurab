@@ -15,6 +15,7 @@ let _modal = null;
 let _modalContent = null;
 let _chatMessages = null;
 let _chatInput = null;
+let _aiButton = null;
 
 let isOpen = false;
 let isWaiting = false; // Evita envío duplicado mientras espera respuesta
@@ -31,6 +32,7 @@ export function initModal() {
     _modalContent = document.getElementById('modalContent');
     _chatMessages = document.getElementById('chatMessages');
     _chatInput = document.getElementById('chatInput');
+    _aiButton = document.getElementById('aiButton');
 
     const closeBtn = document.getElementById('closeModal');
     const chatSendBtn = document.getElementById('chatSendBtn');
@@ -62,8 +64,7 @@ function _bindOpenTriggers() {
     const openModal = () => _openModal();
 
     // Botón flotante principal
-    const aiBtn = document.getElementById('aiButton');
-    if (aiBtn) aiBtn.addEventListener('click', openModal);
+    if (_aiButton) _aiButton.addEventListener('click', openModal);
 
     // Botón secundario en hero
     const heroBtn = document.getElementById('openAiFromHero');
@@ -79,6 +80,8 @@ function _openModal() {
     if (isOpen) return;
     isOpen = true;
 
+    if (_aiButton) _aiButton.classList.add('hidden');
+
     _modal.classList.remove('hidden');
     requestAnimationFrame(() => {
         _modal.classList.remove('opacity-0');
@@ -90,6 +93,8 @@ function _openModal() {
 function _closeModal() {
     if (!isOpen) return;
     isOpen = false;
+
+    if (_aiButton) _aiButton.classList.remove('hidden');
 
     _modalContent.classList.remove('scale-100');
     _modalContent.classList.add('scale-95');
